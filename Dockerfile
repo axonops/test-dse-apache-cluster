@@ -8,4 +8,4 @@ WORKDIR /app
 COPY target/executable-jar-1.0-jar-with-dependencies.jar /app
 
 # Set the entry point to run your application
-ENTRYPOINT ["java", "-jar", "executable-jar-1.0-jar-with-dependencies.jar", "10.7.1.11:9042", "LOCAL_QUORUM", "cassandra", "cassandra"]
+ENTRYPOINT ["java", "-jar", "executable-jar-1.0-jar-with-dependencies.jar", "10.7.1.11:9042", "omega", "LOCAL_QUORUM", "cassandra", "cassandra"]
