@@ -8,9 +8,6 @@ Run next commands:
 3. `cd target`
 4. `java -jar executable-jar-1.0-jar-with-dependencies.jar "127.0.0.1:9042" "omega" "LOCAL_QUORUM" "cassandra" "cassandra"`
 
-or if using docker and docker-compose:
-
-`Hello world, executable-jar-example!`
 
 ## Troubleshooting
 ...
