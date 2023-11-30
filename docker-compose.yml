@@ -1,0 +1,247 @@
+version: '3'
+
+networks:
+  axonops-cassandra:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.7.1.0/16
+services:
+  cass-alpha1:
+    image: axonops-cassandra:4.0.11
+    container_name: cass-alpha1
+    hostname: cass-alpha1
+    mem_limit: 1g
+    entrypoint: ["/bin/sh","-c","startwebhooks.sh && startcassandra.sh && tailcassandralogs.sh"]
+    ports:
+      - "9042:9042"
+      - "9001:9000"
+    networks:
+      axonops-cassandra:
+        ipv4_address: 10.7.1.11
+    cap_add:
+      - IPC_LOCK
+    ulimits:
+      memlock: -1
+    volumes:
+      - ./cassandracluster/multidc/docker_containers/cass-alpha1/config:/opt/cassandra/conf
+      - ./cassandracluster/multidc/docker_containers/cass-alpha1/data:/var/lib/cassandra/data
+      - ./cassandracluster/multidc/docker_containers/cass-alpha1/hints:/var/lib/cassandra/hints
+      - ./cassandracluster/multidc/docker_containers/cass-alpha1/commitlog:/var/lib/cassandra/commitlog
+      - ./cassandracluster/multidc/docker_containers/cass-alpha1/cdc_raw:/var/lib/cassandra/cdc_raw
+      - ./cassandracluster/multidc/docker_containers/cass-alpha1/saved_caches:/var/lib/cassandra/saved_caches
+      - ./cassandracluster/multidc/docker_containers/cass-alpha1/logs:/var/log/cassandra
+  
+  cass-alpha2:
+    container_name: cass-alpha2
+    hostname: cass-alpha2
+    mem_limit: 1g
+    image: axonops-cassandra:4.0.11
+    entrypoint: ["/bin/sh","-c","waitforit.sh cass-alpha1:9042 --timeout=600 --strict -- echo 'Cassandra is up on cass-alpha1, starting cass-alpha2' && startwebhooks.sh && startcassandra.sh && tailcassandralogs.sh"]
+    ports:
+      - "9043:9042"
+      - "9002:9000"
+    networks:
+      axonops-cassandra:
+        ipv4_address: 10.7.1.12
+    cap_add:
+      - IPC_LOCK
+    ulimits:
+      memlock: -1
+    volumes:
+      - ./cassandracluster/multidc/docker_containers/cass-alpha2/config:/opt/cassandra/conf
+      - ./cassandracluster/multidc/docker_containers/cass-alpha2/data:/var/lib/cassandra/data
+      - ./cassandracluster/multidc/docker_containers/cass-alpha2/hints:/var/lib/cassandra/hints
+      - ./cassandracluster/multidc/docker_containers/cass-alpha2/commitlog:/var/lib/cassandra/commitlog
+      - ./cassandracluster/multidc/docker_containers/cass-alpha2/cdc_raw:/var/lib/cassandra/cdc_raw
+      - ./cassandracluster/multidc/docker_containers/cass-alpha2/saved_caches:/var/lib/cassandra/saved_caches
+      - ./cassandracluster/multidc/docker_containers/cass-alpha2/logs:/var/log/cassandra
+    depends_on:
+      - cass-alpha1
+
+
+  cass-alpha3:
+    container_name: cass-alpha3
+    hostname: cass-alpha3
+    mem_limit: 1g
+    image: axonops-cassandra:4.0.11
+    entrypoint: ["/bin/sh","-c","waitforit.sh cass-alpha2:9042 --timeout=600 --strict -- echo 'Cassandra is up on cass-alpha2, starting cass-alpha3' && startwebhooks.sh && startcassandra.sh && tailcassandralogs.sh"]
+    ports:
+      - "9044:9042"
+      - "9003:9000"
+    networks:
+      axonops-cassandra:
+        ipv4_address: 10.7.1.13
+    cap_add:
+      - IPC_LOCK
+    ulimits:
+      memlock: -1
+    volumes:
+      - ./cassandracluster/multidc/docker_containers/cass-alpha3/config:/opt/cassandra/conf
+      - ./cassandracluster/multidc/docker_containers/cass-alpha3/data:/var/lib/cassandra/data
+      - ./cassandracluster/multidc/docker_containers/cass-alpha3/hints:/var/lib/cassandra/hints
+      - ./cassandracluster/multidc/docker_containers/cass-alpha3/commitlog:/var/lib/cassandra/commitlog
+      - ./cassandracluster/multidc/docker_containers/cass-alpha3/cdc_raw:/var/lib/cassandra/cdc_raw
+      - ./cassandracluster/multidc/docker_containers/cass-alpha3/saved_caches:/var/lib/cassandra/saved_caches
+      - ./cassandracluster/multidc/docker_containers/cass-alpha3/logs:/var/log/cassandra
+    depends_on:
+      - cass-alpha2
+
+
+  cass-alpha4:
+    container_name: cass-alpha4
+    hostname: cass-alpha4
+    mem_limit: 1g
+    image: axonops-cassandra:4.0.11
+    entrypoint: ["/bin/sh","-c","waitforit.sh cass-alpha3:9042 --timeout=600 --strict -- echo 'Cassandra is up on cass-alpha3, starting cass-alpha4' && startwebhooks.sh && startcassandra.sh && tailcassandralogs.sh"]
+    ports:
+      - "9045:9042"
+      - "9004:9000"
+    networks:
+      axonops-cassandra:
+        ipv4_address: 10.7.1.14
+    cap_add:
+      - IPC_LOCK
+    ulimits:
+      memlock: -1
+    volumes:
+      - ./cassandracluster/multidc/docker_containers/cass-alpha4/config:/opt/cassandra/conf
+      - ./cassandracluster/multidc/docker_containers/cass-alpha4/data:/var/lib/cassandra/data
+      - ./cassandracluster/multidc/docker_containers/cass-alpha4/hints:/var/lib/cassandra/hints
+      - ./cassandracluster/multidc/docker_containers/cass-alpha4/commitlog:/var/lib/cassandra/commitlog
+      - ./cassandracluster/multidc/docker_containers/cass-alpha4/cdc_raw:/var/lib/cassandra/cdc_raw
+      - ./cassandracluster/multidc/docker_containers/cass-alpha4/saved_caches:/var/lib/cassandra/saved_caches
+      - ./cassandracluster/multidc/docker_containers/cass-alpha4/logs:/var/log/cassandra
+    depends_on:
+      - cass-alpha3
+
+  cass-omega1:
+    container_name: cass-omega1
+    hostname: cass-omega1
+    mem_limit: 1g
+    image: axonops-cassandra:4.0.11
+    entrypoint: ["/bin/sh","-c","waitforit.sh cass-alpha4:9042 --timeout=600 --strict -- echo 'Cassandra is up on cass-alpha4, starting cass-omega1' && startwebhooks.sh && startcassandra.sh && tailcassandralogs.sh"]
+    ports:
+      - "9046:9042"
+      - "9005:9000"
+    networks:
+      axonops-cassandra:
+        ipv4_address: 10.7.1.21
+    cap_add:
+      - IPC_LOCK
+    ulimits:
+      memlock: -1
+    volumes:
+      - ./cassandracluster/multidc/docker_containers/cass-omega1/config:/opt/cassandra/conf
+      - ./cassandracluster/multidc/docker_containers/cass-omega1/data:/var/lib/cassandra/data
+      - ./cassandracluster/multidc/docker_containers/cass-omega1/hints:/var/lib/cassandra/hints
+      - ./cassandracluster/multidc/docker_containers/cass-omega1/commitlog:/var/lib/cassandra/commitlog
+      - ./cassandracluster/multidc/docker_containers/cass-omega1/cdc_raw:/var/lib/cassandra/cdc_raw
+      - ./cassandracluster/multidc/docker_containers/cass-omega1/saved_caches:/var/lib/cassandra/saved_caches
+      - ./cassandracluster/multidc/docker_containers/cass-omega1/logs:/var/log/cassandra
+    depends_on:
+      - cass-alpha4
+
+  cass-omega2:
+    container_name: cass-omega2
+    hostname: cass-omega2
+    mem_limit: 1g
+    image: axonops-cassandra:4.0.11
+    entrypoint: ["/bin/sh","-c","waitforit.sh cass-omega1:9042 --timeout=600 --strict -- echo 'Cassandra is up on cass-omega1, starting cass-omega2' && startwebhooks.sh && startcassandra.sh && tailcassandralogs.sh"]
+    ports:
+      - "9047:9042"
+      - "9006:9000"
+    networks:
+      axonops-cassandra:
+        ipv4_address: 10.7.1.22
+    cap_add:
+      - IPC_LOCK
+    ulimits:
+      memlock: -1
+    volumes:
+      - ./cassandracluster/multidc/docker_containers/cass-omega2/config:/opt/cassandra/conf
+      - ./cassandracluster/multidc/docker_containers/cass-omega2/data:/var/lib/cassandra/data
+      - ./cassandracluster/multidc/docker_containers/cass-omega2/hints:/var/lib/cassandra/hints
+      - ./cassandracluster/multidc/docker_containers/cass-omega2/commitlog:/var/lib/cassandra/commitlog
+      - ./cassandracluster/multidc/docker_containers/cass-omega2/cdc_raw:/var/lib/cassandra/cdc_raw
+      - ./cassandracluster/multidc/docker_containers/cass-omega2/saved_caches:/var/lib/cassandra/saved_caches
+      - ./cassandracluster/multidc/docker_containers/cass-omega2/logs:/var/log/cassandra
+    depends_on:
+      - cass-omega1
+
+
+  cass-omega3:
+    container_name: cass-omega3
+    hostname: cass-omega3
+    mem_limit: 1g
+    image: axonops-cassandra:4.0.11
+    entrypoint: ["/bin/sh","-c","waitforit.sh cass-omega2:9042 --timeout=600 --strict -- echo 'Cassandra is up on cass-alpha4, starting cass-omega3' && startwebhooks.sh && startcassandra.sh && tailcassandralogs.sh"]
+    ports:
+      - "9048:9042"
+      - "9007:9000"
+    networks:
+      axonops-cassandra:
+        ipv4_address: 10.7.1.23
+    cap_add:
+      - IPC_LOCK
+    ulimits:
+      memlock: -1
+    volumes:
+      - ./cassandracluster/multidc/docker_containers/cass-omega3/config:/opt/cassandra/conf
+      - ./cassandracluster/multidc/docker_containers/cass-omega3/data:/var/lib/cassandra/data
+      - ./cassandracluster/multidc/docker_containers/cass-omega3/hints:/var/lib/cassandra/hints
+      - ./cassandracluster/multidc/docker_containers/cass-omega3/commitlog:/var/lib/cassandra/commitlog
+      - ./cassandracluster/multidc/docker_containers/cass-omega3/cdc_raw:/var/lib/cassandra/cdc_raw
+      - ./cassandracluster/multidc/docker_containers/cass-omega3/saved_caches:/var/lib/cassandra/saved_caches
+      - ./cassandracluster/multidc/docker_containers/cass-omega3/logs:/var/log/cassandra
+    depends_on:
+      - cass-omega2
+
+
+  cass-omega4:
+    container_name: cass-omega4
+    hostname: cass-omega4
+    mem_limit: 1g
+    image: axonops-cassandra:4.0.11
+    entrypoint: ["/bin/sh","-c","waitforit.sh cass-omega3:9042 --timeout=600 --strict -- echo 'Cassandra is up on cass-omega3, starting cass-omega4' && startwebhooks.sh && startcassandra.sh && tailcassandralogs.sh"]
+    ports:
+      - "9049:9042"
+      - "9008:9000"
+    networks:
+      axonops-cassandra:
+        ipv4_address: 10.7.1.24
+    cap_add:
+      - IPC_LOCK
+    ulimits:
+      memlock: -1
+    volumes:
+      - ./cassandracluster/multidc/docker_containers/cass-omega4/config:/opt/cassandra/conf
+      - ./cassandracluster/multidc/docker_containers/cass-omega4/data:/var/lib/cassandra/data
+      - ./cassandracluster/multidc/docker_containers/cass-omega4/hints:/var/lib/cassandra/hints
+      - ./cassandracluster/multidc/docker_containers/cass-omega4/commitlog:/var/lib/cassandra/commitlog
+      - ./cassandracluster/multidc/docker_containers/cass-omega4/cdc_raw:/var/lib/cassandra/cdc_raw
+      - ./cassandracluster/multidc/docker_containers/cass-omega4/saved_caches:/var/lib/cassandra/saved_caches
+      - ./cassandracluster/multidc/docker_containers/cass-omega4/logs:/var/log/cassandra
+    depends_on:
+      - cass-omega3
+
+  cass-bootstrapper:
+    container_name: cass-bootstrapper
+    hostname: cass-bootstrapper
+    mem_limit: 50m
+    image: axonops-cassandra:4.0.11
+    # stdin_open: true
+    # tty: true
+    #entrypoint: /bin/sh
+    entrypoint: ["/bin/sh","-c","waitforit.sh cass-omega4:9042 --timeout=600 --strict -- echo 'Cassandra cluster is up and running, starting schema alters and repairs' && repaircluster.sh && setupcassandradata.sh && repaircluster.sh"]
+    networks:
+      axonops-cassandra:
+        ipv4_address: 10.7.1.5
+    cap_add:
+      - IPC_LOCK
+    ulimits:
+      memlock: -1
+    volumes:
+      - ./src/test/resources/test.cql:/cql/test.cql
+    depends_on:
+      - cass-omega4
