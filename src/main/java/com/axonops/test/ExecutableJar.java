@@ -19,10 +19,10 @@ import java.net.InetSocketAddress;
 public class ExecutableJar {
 
     private static final Logger logger = LoggerFactory.getLogger(ExecutableJar.class);
-    public static final String CQL1 = "SELECT name FROM integrationtests_multidc_rf3.test1 WHERE id = 3";
+    public static final String CQL1 = "SELECT myvalue FROM integrationtests_multidc_rf3.test1 WHERE myid = 3";
     public static final String CQL2 = "INSERT INTO integrationtests_multidc_rf3.test1 (myid, myvalue) VALUES (99, '99 some text')";
-    public static final String CQL3 = "SELECT name FROM integrationtests_multidc_rf3.test1 WHERE id = 99";
-    public static final String CQL4 = "DELETE FROM integrationtests_multidc_rf3.test1 WHERE id = 99";
+    public static final String CQL3 = "SELECT myvalue FROM integrationtests_multidc_rf3.test1 WHERE myid = 99";
+    public static final String CQL4 = "DELETE FROM integrationtests_multidc_rf3.test1 WHERE myid = 99";
 
 
 
@@ -75,7 +75,7 @@ public class ExecutableJar {
                                 .setExecutionProfile(dynamicProfile)
                                 .build();
                 ResultSet result1 = session.execute(s1);
-                logger.info("{} is {}", CQL1, result1.one().getString("name"));
+                logger.info("{} is {}", CQL1, result1.one().getString("myvalue"));
                 sleep(100);
 
                 SimpleStatement s2 =
@@ -91,7 +91,7 @@ public class ExecutableJar {
                                 .setExecutionProfile(dynamicProfile)
                                 .build();
                 ResultSet result3 = session.execute(s3);
-                logger.info("{} is {}", CQL3, result3.one().getString("name"));
+                logger.info("{} is {}", CQL3, result3.one().getString("myvalue"));
                 sleep(100);
 
                 SimpleStatement s4 =
