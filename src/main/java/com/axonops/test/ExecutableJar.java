@@ -28,6 +28,7 @@ public class ExecutableJar {
 
     public static void main(String[] args) {
         if (args.length != 5) {
+            logger.error("Invalid number of arguments. Expected 5, got {}.", args.length);
             System.err.println("Usage: java ExecutableJar <contactpoint> <localdc> <consistency> <username> <password>");
             System.exit(5);
         }

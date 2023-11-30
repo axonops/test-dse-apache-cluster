@@ -6,9 +6,9 @@ Run next commands:
 1. `cd ${projectDir}`
 2. `mvn clean package`
 3. `cd target`
-4. `java -jar executable-jar-1.0-jar-with-dependencies.jar`
+4. `java -jar executable-jar-1.0-jar-with-dependencies.jar "127.0.0.1:9042" "omega" "LOCAL_QUORUM" "cassandra" "cassandra"`
 
-the result would:
+or if using docker and docker-compose:
 
 `Hello world, executable-jar-example!`
 
