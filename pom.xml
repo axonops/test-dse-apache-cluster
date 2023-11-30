@@ -16,7 +16,7 @@
         <junit.version>5.6.0</junit.version>
         <logback.version>1.4.13</logback.version>
         <slf4j.version>2.0.9</slf4j.version>
-        <cassandra-driver.version>4.17.0</cassandra-driver.version>
+        <cassandra-driver.version>4.16.0</cassandra-driver.version>
 
     </properties>
 
