@@ -1,0 +1,8 @@
+[authentication]
+username = cassandra
+password = cassandra
+
+[connection]
+hostname = 10.7.1.11
+port = 9042
+ssl = false

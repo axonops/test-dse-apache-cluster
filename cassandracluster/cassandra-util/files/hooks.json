@@ -1,0 +1,7 @@
+[
+    {
+      "id": "repair-cluster",
+      "execute-command": "/usr/local/bin/repaircluster.sh",
+      "command-working-directory": "/var/webhook"
+    }
+]

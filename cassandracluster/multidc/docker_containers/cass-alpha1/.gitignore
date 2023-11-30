@@ -1,0 +1,12 @@
+data/*
+!data/.gitkeep
+hints/*
+!hints/.gitkeep
+commitlog/*
+!commitlog/.gitkeep
+cdc_raw/*
+!cdc_raw/.gitkeep
+saved_caches/*
+!saved_caches/.gitkeep
+logs/*
+!logs/.gitkeep

@@ -1,0 +1,162 @@
+[
+    {
+        "id": "is-repair-running",
+        "execute-command": "/usr/local/bin/isrepairrunning.sh",
+        "command-working-directory": "/var/webhook",
+        "include-command-output-in-response": true
+    },
+    {
+        "id": "repair-node",
+        "response-message": "Repairing Node",
+        "execute-command": "/usr/local/bin/repairnode.sh",
+        "command-working-directory": "/var/webhook"
+    },
+    {
+      "id": "repair-cluster",
+      "response-message": "Repairing Cluster",
+      "execute-command": "/usr/local/bin/repaircluster.sh",
+      "command-working-directory": "/var/webhook"
+    },
+    {
+        "id": "setup-cassandra-data",
+        "execute-command": "/usr/local/bin/setupcassandradata.sh",
+        "command-working-directory": "/var/webhook",
+        "include-command-output-in-response": true
+
+    },
+    {
+        "id": "kill-cassandra",
+        "execute-command": "/usr/local/bin/killcassandra.sh",
+        "command-working-directory": "/var/webhook",
+        "include-command-output-in-response": true
+    },
+    {
+        "id": "start-cassandra",
+        "execute-command": "/usr/local/bin/startcassandra.sh",
+        "command-working-directory": "/var/webhook",
+        "include-command-output-in-response": true
+    },
+    {
+        "id": "stop-cassandra",
+        "response-message": "Stopping Cassandra",
+        "execute-command": "/usr/local/bin/stopcassandra.sh",
+        "command-working-directory": "/var/webhook",
+        "include-command-output-in-response": true
+    },
+    {
+        "id": "nodetool-status",
+        "execute-command": "/usr/local/bin/nodetoolstatus.sh",
+        "command-working-directory": "/var/webhook",
+        "include-command-output-in-response": true
+    },
+    {
+        "id": "nodetool-info",
+        "execute-command": "/usr/local/bin/nodetoolinfo.sh",
+        "command-working-directory": "/var/webhook",
+        "include-command-output-in-response": true
+    },
+    {
+        "id": "nodetool-describecluster",
+        "execute-command": "/usr/local/bin/nodetooldescribecluster.sh",
+        "command-working-directory": "/var/webhook",
+        "include-command-output-in-response": true
+    },
+    {
+        "id": "nodetool-gossipinfo",
+        "execute-command": "/usr/local/bin/nodetoolgossipinfo.sh",
+        "command-working-directory": "/var/webhook",
+        "include-command-output-in-response": true
+    },
+    {
+        "id": "nodetool-disablebinary",
+        "execute-command": "/usr/local/bin/nodetooldisablebinary.sh",
+        "command-working-directory": "/var/webhook",
+        "include-command-output-in-response": true
+    },
+    {
+        "id": "nodetool-enablebinary",
+        "execute-command": "/usr/local/bin/nodetoolenablebinary.sh",
+        "command-working-directory": "/var/webhook",
+        "include-command-output-in-response": true
+    },
+    {
+        "id": "nodetool-disablegossip",
+        "execute-command": "/usr/local/bin/nodetooldisablegossip.sh",
+        "command-working-directory": "/var/webhook",
+        "include-command-output-in-response": true
+    },
+    {
+        "id": "nodetool-enablegossip",
+        "execute-command": "/usr/local/bin/nodetoolenablegossip.sh",
+        "command-working-directory": "/var/webhook",
+        "include-command-output-in-response": true
+    },
+    {
+        "id": "nodetool-disablehandoff",
+        "execute-command": "/usr/local/bin/nodetooldisablehandoff.sh",
+        "command-working-directory": "/var/webhook",
+        "include-command-output-in-response": true
+    },
+    {
+        "id": "nodetool-enablehandoff",
+        "execute-command": "/usr/local/bin/nodetoolenablehandoff.sh",
+        "command-working-directory": "/var/webhook",
+        "include-command-output-in-response": true
+    },
+    {
+        "id": "nodetool-disablehintsforalpha",
+        "execute-command": "/usr/local/bin/nodetooldisablehintsforalpha.sh",
+        "command-working-directory": "/var/webhook",
+        "include-command-output-in-response": true
+    },
+    {
+        "id": "nodetool-disablehintsforomega",
+        "execute-command": "/usr/local/bin/nodetooldisablehintsforomega.sh",
+        "command-working-directory": "/var/webhook",
+        "include-command-output-in-response": true
+    },
+    {
+        "id": "nodetool-enablehintsforalpha",
+        "execute-command": "/usr/local/bin/nodetoolenablehintsforalpha.sh",
+        "command-working-directory": "/var/webhook",
+        "include-command-output-in-response": true
+    },
+    {
+        "id": "nodetool-enablehintsforomega",
+        "execute-command": "/usr/local/bin/nodetoolenablehintsforomega.sh",
+        "command-working-directory": "/var/webhook",
+        "include-command-output-in-response": true
+    },
+    {
+        "id": "wait-for-cassandra-to-start",
+        "execute-command": "/usr/local/bin/waitforcassandratostart.sh",
+        "command-working-directory": "/var/webhook",
+        "include-command-output-in-response": true,
+        "pass-arguments-to-command":
+        [
+            {
+                "source": "url",
+                "name": "host"
+            }
+        ]
+    },
+    {
+        "id": "repair-target",
+        "execute-command": "/usr/local/bin/repairtarget.sh",
+        "command-working-directory": "/var/webhook",
+        "include-command-output-in-response": true,
+        "pass-arguments-to-command":
+        [
+            {
+                "source": "url",
+                "name": "target"
+            }
+        ]
+    },
+    {
+        "id": "check-cassandra-stable",
+        "execute-command": "/usr/local/bin/checkcassandrastable.sh",
+        "command-working-directory": "/var/webhook",
+        "include-command-output-in-response": true
+    }
+]
