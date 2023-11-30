@@ -1,17 +1,17 @@
-package com.github.romankh3.executablejar;
+package com.axonops.test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 
 /**
- * Unit-level testing for {@link ExecutableJarExample} object.
+ * Unit-level testing for {@link ExecutableJar} object.
  */
 public class ExecutableJarExampleTest {
 
     @Test
     public void shouldCreateJavaRepositoryTemplateMain() {
-        ExecutableJarExample main = new ExecutableJarExample();
+        ExecutableJar main = new ExecutableJar();
         assertNotNull(main);
     }
 
